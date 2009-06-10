@@ -1,0 +1,165 @@
+* { margin: 0px; padding: 0px; }
+body {
+  font-family: sans-serif;
+  font-size: 62.5%;
+}
+
+h1 {
+  font-size: 1.8em;
+  font-weight: bold;
+}
+p {
+  margin-top: 1em;
+  margin-bottom: 1em;
+  font-size: 1.3em;
+}
+hr {
+  color: #E0E0E0;
+  background-color: #E0E0E0;
+  height: 1px;
+  border: 0;
+}
+
+a:link, a:visited {
+  color: #5ca5ff;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #ffcc66;
+  text-decoration: none;
+}
+
+#left {
+  float: left;
+  width: 18em;
+  margin: 0.5em;
+}
+#map {
+  border: 1px solid #222;
+  position: absolute;
+  top: 0.5em;
+  bottom: 0.5em;
+  left: 20em;
+  right: 0.5em;
+}
+
+.searchbox {
+  background:#EEEEEE none repeat scroll 0% 0%;
+  border:1px solid #CCCCCC;
+  font-size:12px;
+  left:0px;
+  line-height:1.2em;
+  min-width:150px;
+  margin-top: 1em;
+  padding:0.5em;
+  text-align:left;
+  width:14.5em;
+}
+
+.searchbox a:link, .searchbox a:visited {
+  font-weight: normal;
+  color: #5ca5ff;
+  text-decoration: none;
+}
+
+.searchbox a:hover {
+  color: #ffcc66;
+  text-decoration: none;
+}
+
+.search_results_heading {
+  background:#DDDDDD none repeat scroll 0% 0%;
+  border:1px solid #CCCCCC;
+  margin:0px;
+  padding:3px 6px;
+  font-size:12px;
+}
+
+.search_results_entry {
+  margin:0px;
+  padding:2px 6px;
+  font-size:12px;
+}
+
+.creditsbox {
+  margin: 0;
+  position: absolute;
+  bottom: 0.5em;
+  left: 0.5em;
+}
+
+.creditsbox a:link, .creditsbox a:visited {
+  font-weight: bold;
+  color: #5ca5ff;
+  text-decoration: none;
+}
+
+.creditsbox a:hover {
+  color: #ffcc66;
+  text-decoration: none;
+}
+
+.iewarn {
+  color: red;
+  font-weight: bold;
+}
+
+.olFramedCloudPopupContent {
+  padding: 10px;
+  overflow: auto;
+}
+
+.mypanel {
+  float:left;
+  left: 60px;
+  top: 10px;
+}
+
+.mypanel div {
+  float:left;
+  margin-right: 5px;
+  width:  24px;
+  height: 24px;
+}
+
+.activateAddPointBtnItemActive {
+  background-image: url("icon_plus.png");
+}
+
+.activateAddPointBtnItemInactive {
+  background-image: url("icon_plus_gray.png");
+}
+
+.activateRemovePointBtnItemActive  {
+  background-image: url("icon_minus.png");
+}
+
+.activateRemovePointBtnItemInactive  {
+  background-image: url("icon_minus.png");
+}
+
+.doRoutingBtnItemActive  {
+  background-image: url("icon_go.png");
+}
+
+.doRoutingCarBtnItemInactive  {
+  background-image: url("icon_go_car.png");
+}
+
+.doRoutingCycleBtnItemInactive  {
+  background-image: url("icon_go_cycle.png");
+}
+
+.doRoutingWalkBtnItemInactive  {
+  background-image: url("icon_go_walk.png");
+}
+
+.alert {
+  color: red;
+  font-weight: bold;
+}
+
+input[type="text"], input[type="submit"] {
+  border:1px solid black;
+}
