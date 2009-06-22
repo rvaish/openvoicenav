@@ -1,0 +1,32 @@
+Install Mercurial
+http://www.selenic.com/mercurial/wiki/
+
+Open Command Window Here
+http://www.microsoft.com/windowsxp/downloads/powertoys/xppowertoys.mspx
+is very useful Power Toy for Windows XP
+
+In some directory in command line
+    hg clone https://openvoicenav.googlecode.com/hg/ openvoicenav
+or use some other title instead of openvoicnav
+
+change to that directory, copy some files there, use command
+    hg st
+to see what files changed (M), new (?), were added (A)
+
+add new files with
+    hg add
+
+commit with a message
+    hg ci -m "in this commit I added this and that"
+
+push to the server
+    hg push
+you'll need your password for googlecode, that can be found at
+http://code.google.com/hosting/settings
+
+patterns to ignore can be written to .hgignore, at the moment all files with extension .zip are ignored
+
+Good read
+http://www.selenic.com/mercurial/wiki/MercurialBook
+
+There are visual clients for Mercurial, but I would recommend understanding it with command line first.

@@ -1,0 +1,407 @@
+<html>
+    <head>
+    <title>{{title}}</title>
+    <LINK REL="SHORTCUT ICON" HREF="../static/favicon.ico">
+    <link rel="StyleSheet" type="text/css" href="static/stylesheet.css" media="screen" />
+    <!--[if IE]><link rel="StyleSheet" type="text/css" href="static/stylesheet-ie.css" media="screen" /><![endif]-->
+    
+    <script src="../static/ol26/OpenLayers.js"></script>
+    <script type="text/javascript" src="./static/json2.js"></script>
+    <script src="http://openstreetmap.org/openlayers/OpenStreetMap.js"></script>
+    <script type="text/javascript">
+    //
+    // As mentioned at http://en.wikipedia.org/wiki/XMLHttpRequest
+    //
+    if( !window.XMLHttpRequest ) XMLHttpRequest = function()
+    {
+      try{ return new ActiveXObject("Msxml2.XMLHTTP.6.0") }catch(e){}
+      try{ return new ActiveXObject("Msxml2.XMLHTTP.3.0") }catch(e){}
+      try{ return new ActiveXObject("Msxml2.XMLHTTP") }catch(e){}
+      try{ return new ActiveXObject("Microsoft.XMLHTTP") }catch(e){}
+      throw new Error("Could not find an XMLHttpRequest alternative.")
+    };
+
+    //
+    // Makes an AJAX request to a local server function w/ optional arguments
+    //
+    // functionName: the name of the server's AJAX function to call
+    // opt_argv: an Array of arguments for the AJAX function
+    //
+    function Request(function_name, opt_argv) {
+
+      if (!opt_argv)
+        opt_argv = new Array();
+     
+      // Find if the last arg is a callback function; save it
+      var callback = null;
+      var len = opt_argv.length;
+      if (len > 0 && typeof opt_argv[len-1] == 'function') {
+        callback = opt_argv[len-1];
+        opt_argv.length--;
+      }
+      var async = (callback != null);
+     
+      // Encode the arguments in to a URI
+      var query = 'action=' + encodeURIComponent(function_name);
+      for (var i = 0; i < opt_argv.length; i++) {
+        var key = 'arg' + i;
+        var val = JSON.stringify(opt_argv[i]);
+        query += '&' + key + '=' + encodeURIComponent(val);
+      }
+      query += '&time=' + new Date().getTime(); // IE cache workaround
+
+      // Create an XMLHttpRequest 'GET' request w/ an optional callback handler 
+      var req = new XMLHttpRequest();
+      req.open('GET', '/rpc?' + query, async);
+     
+      if (async) {
+        req.onreadystatechange = function() {
+          if(req.readyState == 4 && req.status == 200) {
+            var response = null;
+            try {
+             response = JSON.parse(req.responseText);
+            } catch (e) {
+             response = req.responseText;
+            }
+            callback(response);
+          }
+        }
+      }     
+      // Make the actual request
+      req.send(null);
+    }
+
+    // Adds a stub function that will pass the arguments to the AJAX call 
+    function InstallFunction(obj, functionName) {
+      obj[functionName] = function() { Request(functionName, arguments); }
+    }
+
+    // Server object that will contain the callable methods
+    var server = {};
+
+    // Insert 'Add' as the name of a callable method
+    InstallFunction(server, 'Add');
+    InstallFunction(server, 'Route2Points');
+    // InstallFunction(server, 'GetCurrentLocation');
+    InstallFunction(server, 'GetPlacesFromString');
+
+    // Handy "macro"
+    function $(id){
+      return document.getElementById(id);
+    }
+
+    // Client function that calls a server rpc and provides a callback
+    function doAdd() {
+      server.Add($('num1').value, $('num2').value, onAddSuccess);
+    }
+
+    // Callback for after a successful doAdd
+    function onAddSuccess(response) {
+      $('result').value = response;
+      $('status').innerHTML = "success";
+    }
+
+    // currently not used
+    function onGetLocation(response) {
+      //~ logdebug(response);
+      var formatGeoJSON = new OpenLayers.Format.GeoJSON({'internalProjection':
+                        map.getProjectionObject(), 'externalProjection': new
+                        OpenLayers.Projection("EPSG:4326")});
+      var myfeatures = formatGeoJSON.read(response);
+
+      //~ logdebug(myfeatures[0].geometry.x + ' ' + myfeatures[0].geometry.y);
+      map.setCenter(new OpenLayers.LonLat(myfeatures[0].geometry.x,myfeatures[0].geometry.y), 9);
+
+    }    
+    
+    // Client function that calls a server rpc and provides a callback
+    function doRoute() {
+      server.Route2Points(-7.049032, 110.432809, -7.0135376, 110.4177235, 'car', onRouteSuccess);
+      //~ server.Route2Points(-7.049032, 110.432809, -7.0135376, 110.4177235, onRouteSuccess);
+      //~ server.Route2Points($('num1').value, $('num2').value, onRouteSuccess);
+    }    
+    
+    // Callback for after a successful doAdd
+    function onRouteSuccess(response) {
+        //$('status').innerHTML = response;
+        if (infopopup) {
+          map.removePopup(infopopup);
+          infopopup.destroy();
+          infopopup = null;
+        }
+        var formatGeoJSON = new OpenLayers.Format.GeoJSON({'internalProjection':
+                        map.getProjectionObject(), 'externalProjection': new
+                        OpenLayers.Projection("EPSG:4326")});
+        var myjson = JSON.parse(response);
+        var myfeatures = formatGeoJSON.read(myjson);
+
+        var bounds;
+        if (myfeatures) {
+            if(myfeatures.constructor != Array) {
+                myfeatures = [myfeatures];
+            }
+            for(var i=0; i < myfeatures.length; ++i) {
+                if (!bounds) {
+                    bounds = myfeatures[i].geometry.getBounds();
+                } else {
+                    bounds.extend(myfeatures[i].geometry.getBounds());
+                }
+            }
+            vlayer.addFeatures(myfeatures);
+            map.zoomToExtent(bounds);
+ 
+        } else {
+            logdebug('no features returned');
+        }
+    }
+    
+    function doQuery() {
+        if ($('query').value != "") {
+            server.GetPlacesFromString($('query').value, onQuerySuccess);
+        }
+    }
+    
+    function onQuerySuccess(response) {
+    /*    $('search_result').innerHTML = response;*/
+        
+        var myjson = JSON.parse(response);
+        $('search_result').innerHTML = '<p class="search_results_heading">Results from <a href="http://www.geonames.org/">GeoNames</a></p>';
+        for (var i = 0; i < 20; i++) {
+            if (i < myjson.totalResultsCount) {
+                $('search_result').innerHTML += '<p class="search_results_entry"><a onclick="map.setCenter(new OpenLayers.LonLat(' + myjson.geonames[i].lng+',' + myjson.geonames[i].lat + ').transform(new OpenLayers.Projection(&quot;EPSG:4326&quot;), map.getProjectionObject()), 12); return false;" href="?mlat='+ myjson.geonames[i].lat+'&mlon='+ myjson.geonames[i].lng+'&zoom=12">'+ myjson.geonames[i].name+'</a>, '+ myjson.geonames[i].countryName+'</p>';
+            }
+        }
+    }
+    
+    function logdebug(tolog) {
+            OpenLayers.Console.log(tolog);
+    }
+    
+    function writestatus(tostatus) {
+        $('status').innerHTML = tostatus;
+    }
+
+    function on_feature_added(myobj) {
+        //~ if (myobj.feature.geometry.CLASS_NAME == "OpenLayers.Geometry.Point") {            
+            //~ logdebug(myobj.feature.geometry.x + ' ' + myobj.feature.geometry.y);
+            //~ var mypoint = myobj.feature.geometry.clone().transform(map.getProjectionObject(), new OpenLayers.Projection("EPSG:4326"));
+            //~ logdebug(mypoint.x + ' ' + mypoint.y);
+        //~ }
+        //~ logdebug('on_feature_added called');      
+    }
+    
+    function onPopupClose(evt) {
+        vlayerControls['selectControl'].unselect(selectedFeature);
+    }
+    
+    function onFeatureSelect(feature) {
+        selectedFeature = feature;
+        if (selectedFeature.geometry.CLASS_NAME == "OpenLayers.Geometry.LineString") {
+            var errorstring = '';
+            if (selectedFeature.attributes['route_error']) {
+                errorstring = "<div class='Error_string'>ERROR: " + selectedFeature.attributes['route_error'] + "</div>";
+            }
+            var popup = new OpenLayers.Popup("chicken", 
+                                     //~ feature.geometry.getBounds().getCenterLonLat(),
+                                     map.getCenter(),
+                                     null,
+                                     "<div >Distance: " + (Math.round(feature.geometry.getLength()) / 1000) +" km </div>" + errorstring,
+                                     null, true, onPopupClose);
+            popup.autoSize = true;
+            feature.popup = popup;
+            map.addPopup(popup);
+        }
+    }
+    
+    function onFeatureUnselect(feature) {
+        if (feature.popup) {
+            map.removePopup(feature.popup);
+            feature.popup.destroy();
+            feature.popup = null;
+        }
+    }  
+    
+    function toggleAddPointControl() {
+      if (vlayerControls['pointControl'].active) {
+        toggleVlayerControls('selectControl');
+      } else {
+        toggleVlayerControls('pointControl');
+      }
+    }
+    
+    function toggleVlayerControls(toactivate) {
+      for (var key in vlayerControls) {
+        if (key == toactivate) {
+          vlayerControls[key].activate();
+        } else {
+          vlayerControls[key].deactivate(); 
+        }
+      }
+      if (toactivate == 'pointControl') {
+        document.body.style.cursor='crosshair'; //TODO: change the style to div map only -- style="cursor: crosshair;"
+      } else {
+        document.body.style.cursor='auto'; 
+      }
+    }
+    
+    function doRoutingCar() {
+        doRouting('car');
+    }
+    
+    function doRoutingCycle() {
+        doRouting('cycle');
+    }
+    
+    function doRoutingWalk() {
+        doRouting('foot');
+    }
+    
+    function doRouting(transport) {
+        var startpoint = null;
+        var bRoutingDone = false;
+        var pointsToDestroy = new Array();
+        for (var i = 0; i < vlayer.features.length; i++) {
+            if (vlayer.features[i].geometry.CLASS_NAME == "OpenLayers.Geometry.Point") {
+                var nextpoint = vlayer.features[i].geometry.clone().transform(map.getProjectionObject(), new OpenLayers.Projection("EPSG:4326"));;
+                //~ logdebug(nextpoint.x + ' ' + nextpoint.y);
+                if ((startpoint != null) && (nextpoint != null)) {
+                  //~ logdebug('routing from ' + startpoint.x + ' ' + startpoint.y + ' to ' + nextpoint.x + ' ' + nextpoint.y);
+                  server.Route2Points(startpoint.y, startpoint.x, nextpoint.y, nextpoint.x, transport, onRouteSuccess);
+                  if (! infopopup) {  
+                    infopopup = new OpenLayers.Popup("info", 
+                                   map.getCenter(),
+                                   null,
+                                   "<div >Calculating route... </div>",
+                                   null, false, null);
+                    infopopup.autoSize = true;
+                    map.addPopup(infopopup);
+                  }
+                  bRoutingDone = true;                  
+                }
+                startpoint = nextpoint;
+                pointsToDestroy.push(vlayer.features[i]);
+            }
+        }
+        // delete all points
+        if (bRoutingDone) {
+            vlayer.removeFeatures(pointsToDestroy);
+            writestatus('');
+            toggleVlayerControls('selectControl');
+        } else {
+            writestatus('At least 2 routing points are needed.'); 
+        }
+    }
+    
+    var map, vlayer, vlayerControls, addPointBtn, selectedFeature, infopopup
+    function init() {
+        map = new OpenLayers.Map('map',
+                    { maxExtent: new OpenLayers.Bounds(-20037508.34,-20037508.34,20037508.34,20037508.34),
+                      numZoomLevels: 19,
+                      maxResolution: 156543.0399,
+                      units: 'm',
+                      projection: new OpenLayers.Projection("EPSG:900913"),
+                      displayProjection: new OpenLayers.Projection("EPSG:4326")
+                    });
+        map.addControl(new OpenLayers.Control.LayerSwitcher());
+        map.addControl(new OpenLayers.Control.MousePosition());
+        map.addControl(new OpenLayers.Control.Permalink());
+        map.addControl(new OpenLayers.Control.ScaleLine());
+        
+        var layerMapnik = new OpenLayers.Layer.OSM.Mapnik("Mapnik");
+            map.addLayer(layerMapnik);
+        
+        var layer_style = OpenLayers.Util.applyDefaults({
+            strokeColor: "#00FF00",
+            strokeWidth: 5,
+            strokeOpacity: 0.5}, OpenLayers.Feature.Vector.style["default"]);
+        
+        vlayer = new OpenLayers.Layer.Vector("Routing", {style: layer_style});
+        vlayer.events.register("featureadded", null, on_feature_added);
+        map.addLayer(vlayer);
+        
+        var select_style = OpenLayers.Util.applyDefaults({
+            strokeWidth: 5,
+            strokeOpacity: 0.8}, OpenLayers.Feature.Vector.style["select"]);
+        
+        vlayerControls = {
+            selectControl : new OpenLayers.Control.SelectFeature(vlayer,
+                {onSelect: onFeatureSelect, onUnselect: onFeatureUnselect, hover : true,
+                selectStyle: select_style}),
+            pointControl : new OpenLayers.Control.DrawFeature(vlayer, OpenLayers.Handler.Point)
+        }  
+      
+        for(var key in vlayerControls) {
+          map.addControl(vlayerControls[key]);
+        }
+              
+        var panel = new OpenLayers.Control.Panel({displayClass: "mypanel"});
+        var addPointBtn = new OpenLayers.Control.Button({displayClass: "activateAddPointBtn", trigger: toggleAddPointControl, title:"Add routing points"});
+        var doRoutingCarBtn = new OpenLayers.Control.Button({displayClass: "doRoutingCarBtn", trigger: doRoutingCar, title:"Show driving route"});
+        var doRoutingCycleBtn = new OpenLayers.Control.Button({displayClass: "doRoutingCycleBtn", trigger: doRoutingCycle, title:"Show cycling route"});
+        var doRoutingWalkBtn = new OpenLayers.Control.Button({displayClass: "doRoutingWalkBtn", trigger: doRoutingWalk, title:"Show walking route"});
+        panel.addControls([addPointBtn, doRoutingCarBtn, doRoutingCycleBtn, doRoutingWalkBtn]);
+        map.addControl(panel);
+        
+        //~ map.setCenter(new OpenLayers.LonLat(110.41611,-7.07569).transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject()), 14);
+
+        // server.GetCurrentLocation(onGetLocation);
+
+        // center on the US if not lat,lon is specified
+        var lat = 37.09;
+        var lon = -95.71;
+        var zoom = 4;
+
+        {% if lat %} 
+        map.setCenter(new OpenLayers.LonLat({{lon}},{{lat}}).transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject()), {{zoom}});
+        {% else %}
+        map.setCenter(new OpenLayers.LonLat(lon,lat).transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject()), zoom);
+        {% endif %}
+    }
+
+    </script>
+    </head>
+
+    <body onload="init()">
+    <div id="left">
+        <h1>OpenVoiceNav</h1>
+        <h2>The United States University Campuses</h2>
+        <div id="status"></div>
+        
+        <div class="searchbox">
+            <span class="oboxheader">Search city:</span>        
+            <div class="search_form">
+                <span id="search_field" style="display: inline;">
+                    <form onsubmit="doQuery(); return false;">
+                        <input id="query" type="text" value="" name="query"/>
+                        <input type="submit" value="Go" name="commit"/>
+                    </form>
+                </span>
+                <div id="search_result" class="search_result"></div>
+            </div>
+        </div>
+
+        <div class="textzoombox">
+            <h3>Jump to:</h3>
+
+            <a href="/?lat=30.286&lon=-97.7351&zoom=15">The University of Texas at Austin, TX</a><br/>
+            <a href="/?lat=40.007&lon=-105.265&zoom=15">University of Colorado at Boulder, CO</a><br/>
+            <a href="/?lat=32.23474&lon=-110.95158&zoom=15">The University of Arizon, Tucson, AZ</a><br/>
+            <a href="/?lat=42.37363&lon=-71.11945&zoom=15">Harvard University, Cambridge, MA</a><br/>
+            <a href="/?lat=40.8193&lon=-96.70345&zoom=15">University of Nebraska–Lincoln, Lincoln, NE</a><br/>
+
+        </div>
+            
+        <div class="creditsbox">
+            <h3>Credits:</h3>
+            <a href="http://appengine.google.com">AppEngine</a><br/>
+            <a href="http://openlayers.org/">OpenLayers</a><br/>
+            <a href="http://openstreetbugs.appspot.com/">OpenStreetBugs</a><br/>
+            <a href="http://openstreetmap.org">OpenStreetMap</a><br/>
+            <a href="http://wiki.openstreetmap.org/index.php/Pyroutelib2">Pyroutelib2</a><br/>
+            <a href="http://wiki.openstreetmap.org/index.php/OpenStreetRouting">more info...</a>
+        </div>
+    </div>
+    
+    <div id="map"></div>    
+    </body>
+    </html>
