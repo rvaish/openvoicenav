@@ -82,7 +82,7 @@
     // Insert 'Add' as the name of a callable method
     InstallFunction(server, 'Add');
     InstallFunction(server, 'Route2Points');
-    InstallFunction(server, 'GetCurrentLocation');
+    // InstallFunction(server, 'GetCurrentLocation');
     InstallFunction(server, 'GetPlacesFromString');
 
     // Handy "macro"
@@ -100,14 +100,15 @@
       $('result').value = response;
       $('status').innerHTML = "success";
     }
-    
+
+    // currently not used
     function onGetLocation(response) {
       //~ logdebug(response);
       var formatGeoJSON = new OpenLayers.Format.GeoJSON({'internalProjection':
                         map.getProjectionObject(), 'externalProjection': new
                         OpenLayers.Projection("EPSG:4326")});
       var myfeatures = formatGeoJSON.read(response);
-      
+
       //~ logdebug(myfeatures[0].geometry.x + ' ' + myfeatures[0].geometry.y);
       map.setCenter(new OpenLayers.LonLat(myfeatures[0].geometry.x,myfeatures[0].geometry.y), 9);
 
@@ -342,7 +343,19 @@
         map.addControl(panel);
         
         //~ map.setCenter(new OpenLayers.LonLat(110.41611,-7.07569).transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject()), 14);
-        server.GetCurrentLocation(onGetLocation);
+
+        // server.GetCurrentLocation(onGetLocation);
+
+        // center on the US if not lat,lon is specified
+        var lat = 37.09;
+        var lon = -95.71;
+        var zoom = 4;
+
+        {% if lat %} 
+        map.setCenter(new OpenLayers.LonLat({{lon}},{{lat}}).transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject()), {{zoom}});
+        {% else %}
+        map.setCenter(new OpenLayers.LonLat(lon,lat).transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject()), zoom);
+        {% endif %}
     }
 
     </script>
@@ -350,7 +363,8 @@
 
     <body onload="init()">
     <div id="left">
-        <h1>OpenStreetRouting</h1>
+        <h1>OpenVoiceNav</h1>
+        <h2>The United States University Campuses</h2>
         <div id="status"></div>
         
         <div class="searchbox">
@@ -364,6 +378,17 @@
                 </span>
                 <div id="search_result" class="search_result"></div>
             </div>
+        </div>
+
+        <div class="textzoombox">
+            <h3>Jump to:</h3>
+
+            <a href="/?lat=30.286&lon=-97.7351&zoom=15">The University of Texas at Austin, TX</a><br/>
+            <a href="/?lat=40.007&lon=-105.265&zoom=15">University of Colorado at Boulder, CO</a><br/>
+            <a href="/?lat=32.23474&lon=-110.95158&zoom=15">The University of Arizon, Tucson, AZ</a><br/>
+            <a href="/?lat=42.37363&lon=-71.11945&zoom=15">Harvard University, Cambridge, MA</a><br/>
+            <a href="/?lat=40.8193&lon=-96.70345&zoom=15">University of Nebraska–Lincoln, Lincoln, NE</a><br/>
+
         </div>
             
         <div class="creditsbox">

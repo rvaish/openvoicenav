@@ -19,7 +19,17 @@ except:
 class MainPage(webapp.RequestHandler):
   """ Renders the main template."""
   def get(self):
-    template_values = { 'title':'OpenStreetRouting', }
+
+    lat = self.request.get('lat').strip()
+    lon = self.request.get('lon').strip()
+    zoom = self.request.get('zoom').strip()
+
+    template_values = { 
+            'title':'OpenStreetRouting',
+            'lat':lat,
+            'lon':lon,
+            'zoom':zoom,
+            }
     path = os.path.join(os.path.dirname(__file__), "index.html")
     self.response.out.write(template.render(path, template_values))
 

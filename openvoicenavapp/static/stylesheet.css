@@ -57,6 +57,10 @@ a:hover {
   width:14.5em;
 }
 
+.textzoombox{
+  margin-top: 1em;
+}
+
 .searchbox a:link, .searchbox a:visited {
   font-weight: normal;
   color: #5ca5ff;
