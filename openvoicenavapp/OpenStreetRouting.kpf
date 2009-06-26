@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Komodo Project File - DO NOT EDIT -->
+<project id="01cfd8f2-6372-4e97-bdf0-3a8b1e25100f" kpf_version="4" name="OpenStreetRouting.kpf">
+<preference-set idref="01cfd8f2-6372-4e97-bdf0-3a8b1e25100f">
+  <boolean id="import_live">1</boolean>
+</preference-set>
+</project>
