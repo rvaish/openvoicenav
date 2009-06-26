@@ -3,4 +3,7 @@ syntax: glob
 *.zip
 *.swp
 ci.txt
+<<<<<<< local
 *.orig
+=======
+>>>>>>> other
