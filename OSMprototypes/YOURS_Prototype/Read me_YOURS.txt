@@ -1,0 +1,2 @@
+Please note:
+This algorithm runs only on High Speed Internet.Else, user needs to choose closer source and destinations(ideal for Visually Impaired users who need to walk short distances and have slow Internet access).Mentioning countries helps narrowing results and improve performance.
