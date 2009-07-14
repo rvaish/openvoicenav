@@ -31,6 +31,12 @@ foreach ($ril2->GeocodedAddress as $ri1)
 $ril3 = $ri1->children(NS_Point1)->Point->pos;
  	
 }
+
+  function count_words($str) 
+ {
+ $no = count(explode(",",$str));
+ return $no;
+ }
 //Extracting Lat/Long for Source
 $pos = stripos("$ril1"," ");
 $long = substr("$ril1",0,"$pos");
@@ -41,24 +47,28 @@ $lat = substr("$ril1","$pos");
 //Extracting Lat/Long for Desti
 $pos1 = stripos("$ril3"," ");
 $long1 = substr("$ril3",0,"$pos1");
-
 $lat1 = substr("$ril3","$pos1");
 
+
 $url_route = "http://www.yournavigation.org/gosmore.php?flat="."$lat"."&flon="."$long"."&tlat="."$lat1"."&tlon="."$long1"."&v=motorcar&fast=1&layer=mapnik";
+//echo $url_route;
 $xml2 = simplexml_load_file("$url_route");
 //$xml2 = simplexml_load_file('http://data.giub.uni-bonn.de/openrouteservice/php/DetermineRoute_rajan.php?Start=7.0892567,50.7265543&Via=&End=7.0986258,50.7323634&lang=en&distunit=YD&routepref=Fastest&avoidAreas=&useTMC=false&noMotorways=false&noTollways=false&instructions=true');
 
 $ril4 = $xml2->children()->Document->Folder->Placemark->LineString;
 $costring = $ril4->coordinates;
 
-$number_of_latlong = str_word_count("$costring");
-//echo $number_of_latlong; [It's Important]
+$number_of_latlong_temp = count_words("$costring");
+$number_of_latlong = $number_of_latlong_temp-1;
+
+//$number_of_latlong;   //[It's Important]
 $arry = (str_word_count("$costring",1,"0123456789."));
 
 
 
+
 function distance($Aa, $Ba, $Ca, $Da){
-// Help taken from random portal on Internet for this function. 
+// Help from a random forum on Internet was sought to implement this algorithm.
 // The math for this was taken from http://mathforum.org/library/drmath/view/51711.html
 $input = array($Aa, $Ba, $Ca, $Da);
 foreach($input as $name){
