@@ -1,0 +1,19 @@
+Features to have
+----------------
+1. Users may login (first -- simple login, later when other features are implemented -- OpenID, Twitter, Facebook).
+2. Anybody may submit a location around which to route (for example, a university).
+3. Anybody may submit a point of interest for a given location (for example, a building).
+4. Logged in users may approve a location.
+5. Logged in users may approve a point of interest.
+6. Choose location.
+7. Choose starting point for routing.
+8. Choose ending point for routing.
+9. Get route on static map.
+10. Get points of interest along the route.
+11. Link to webanywhere to have everything spoken on the page.
+12. Logged in user may leave a paragraph about himself and a link.
+13. Anybody may see a contributing user info.
+14. Links to contributing users for a given location.
+15. POIs are fetched from OSM.
+16. POIs may be marked as invisible (not included in output).
+17. Routing is done on live OSM data.
