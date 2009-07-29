@@ -1,0 +1,34 @@
+Task 1
+------
+
+For region
+
+min lat: 51.49939289293944
+max lat: 51.505456972844144
+min lon: -0.09334087371826172
+max lon: -0.07741928100585938
+
+( this is around http://www.openstreetmap.org/?lat=51.50281&lon=-0.08631&zoom=16&layers=B000FTF )
+
+1. Write a php script that will download OSM XML data with OSM API.
+
+2. Write another php script that will parse from that file locations of all pubs. And output in a format:
+
+"Name" lat lon
+
+3. With Paweł Niechoda API
+http://dev.openstreetmap.org/~pafciu17/
+Get the image of this region with width of 800 px. And save it in a file in this folder.
+
+4. Write a php script that will output correspondences in the following format:
+
+( min_lon, min_lat ) - ( x, y )
+( min_lon, max_lat ) - ( x, y )
+( max_lon, min_lat ) - ( x, y )
+( min_lon, max_lat ) - ( x, y )
+
+where x, y are values in pixels of the point on static image downloaded in step 3.
+
+5. Write the fourth script which is combination of steps 2 and 4 that will output location of pubs in a format:
+
+"Name" lat lon x y
