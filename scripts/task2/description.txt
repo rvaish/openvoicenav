@@ -1,0 +1,16 @@
+1. Generate index.html so that all POIs appear on the map. Refer to index.html with two POIs marked.
+
+2. Print the following table with two columns:
+
+Name of POI
+Distance to straint line between "Old King's Head" and "Guy's Hospital" in kilometers.
+
+For reference:
+
+http://local.wasp.uwa.edu.au/~pbourke/geometry/pointline/
+http://softsurfer.com/Archive/algorithm_0102/algorithm_0102.htm#Distance%20to%202-Point%20Line
+
+Not that the formulas in the links above give the length of the perpendicular to the line. If the base of the perpendicular is outside of the line, the shortest distance to ending points should be taken.
+
+For example, distance from "Horseshoe Inn" to the line should be more than 0.150 kilometers.
+
