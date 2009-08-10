@@ -42,13 +42,19 @@ $left = -0.0900;
 $right = -0.0850;
 $top = 51.505;
 $down = 51.502;
+$middle = ($top+$down)/2.;
+$image_width = 466;
+$image_height = 450;
 $query = $left.",".$down.",".$right.",".$top; 
 $basicq = "http://api.openstreetmap.org/api/0.6/map?bbox=";
 $finalq = "$basicq"."$query";
 $image_url1 = "http://dev.openstreetmap.org/~pafciu17/?module=map&bbox=";
 $image_url2 = $left.",".$top.",".$right.",".$down;
-$image_url3 = "&width=900&height=500";
-$image_url = "$image_url1"."$image_url2"."$image_url3";
+$image_url3 = "&zoom=17";
+// $image_url3 = "&width=$image_width";
+$image_url4 = "&points=$left,$middle;$right,$middle;";
+$image_url = "$image_url1"."$image_url2"."$image_url3"."$image_url4";
+echo $image_url;
 
 $long_diff = $right-$left;
 $lat_diff = $top-$down;
@@ -56,9 +62,9 @@ $area = $long_diff*$lat_diff;
 echo "<br/>";
 $xml = simplexml_load_file("$finalq");
 $ril = $xml->children();
-// Assuming image is of size 1000 x 500
-$long_para = 900/$long_diff;
-$lat_para = 500/$lat_diff;
+// image_width and image_height are defined above
+$long_para = $image_width/$long_diff;
+$lat_para = $image_height/$lat_diff;
 $number = 0;
  
 $html_str1 = '<img src='.$image_url.'alt="Planets" usemap="#planetmap" />'.'<map name="planetmap">';  
@@ -72,12 +78,12 @@ if($ri->tag["k"] == "name" && $ri["lat"]>$down && $ri["lat"]<$top && $ri["lon"]<
 //for Lat/Y 
 $lat[$number] = $ri["lat"];
 $y_temp = "$lat[$number]"-$down;
-$y[$number] = (500 - ($lat_para*$y_temp));
+$y[$number] = ($image_height - ($lat_para*$y_temp));
 
 
 // for Long/X
 $long[$number] = $ri["lon"];
-$x_temp = "$long[$number]"-($left);
+$x_temp = "$long[$number]"-$left;
 $x[$number] = $long_para*$x_temp;
 
 
