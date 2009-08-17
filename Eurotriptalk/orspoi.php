@@ -1,5 +1,6 @@
 <html>
 <head>
+<META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
 Point of Interests along Route and/or around Source/Destination in Europe
 </title>

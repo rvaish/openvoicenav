@@ -1,5 +1,6 @@
 <html>
 <head>
+<META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>Firefox user?, try Talking Map, also browse Point of Interests around any location in Europe</title>
 </head>
 <body> 
