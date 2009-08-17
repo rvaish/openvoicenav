@@ -1,5 +1,6 @@
 <html>
 <head>
+<META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>OSM Talking Maps</title>
     <script type="text/javascript" src="json2.js"></script>
     <script type="text/javascript" src="outfox-0.4.0.js"></script>
@@ -75,7 +76,7 @@ elseif (eregi("^[0-9-]+(\.,\s[0-9]+)*", $poi_search))
   $pos_geo = stripos("$poi_search",",");
   $lat_geo = substr("$poi_search",0,"$pos_geo");
   $long_geo = substr("$poi_search",$pos_geo+1);
- 
+  
  }
 
 // Creating URL for POI Extraction

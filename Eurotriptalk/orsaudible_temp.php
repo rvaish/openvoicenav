@@ -1,5 +1,6 @@
 <html>
 <head>
+<META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>OSM Talking Maps</title>
     <script type="text/javascript" src="json2.js"></script>
     <script type="text/javascript" src="outfox-0.4.0.js"></script>
@@ -89,6 +90,13 @@ $finalq_q = $long_geo.",".$lat_geo;
   $finalq = "http://data.giub.uni-bonn.de/openrouteservice/php/Directory_rajan.php?SearchType=dwithin&Position="."$finalq_q"."&MinDistance=0&MaxDistance=1000&POIname=NAICS_type&POIvalue="."$choice"."&MaxResponse=20";
  }
 
+//  Getting BBOX parameters 
+ 
+echo $bbx1 = "http://dev.openstreetmap.org/~pafciu17/?module=map&center=".$finalq_q."&zoom=7&width=400&height=400&bboxReturnFormat=csv";
+echo "</br>";
+echo $file = file_get_contents("$bbx1");
+
+
 // Parsing for POI Extraion 
 $xml = simplexml_load_file("$finalq"); 
 define("NS_XLS", "http://www.opengis.net/xls"); 
@@ -127,7 +135,7 @@ $left = $long_geo - $max_delta_lon;
 
 $image_url1 = "http://dev.openstreetmap.org/~pafciu17/?module=map&bbox=";
 $image_url2 = $left.",".$top.",".$right.",".$down;
-$image_url3 = "&width=800&height=400&points=";
+$image_url3 = "&width=400&height=400&points=";
 $long_diff = $right-$left;
 $lat_diff = $top-$down;
 
@@ -143,7 +151,7 @@ echo $lat_diff = $top-$down;
 
 
 
-
+/*
 echo "</br> hehe";
 echo ($long_diff1*$long_diff2)/$lat_diff;
 
@@ -169,10 +177,10 @@ echo "</br> ratio";
 $long_diff = $long_diff1*$long_diff2;
 echo $long_diff/$lat_diff;
 
+*/
 
-
-// Assuming image is of size 800 x 400
-$long_para = 800/$long_diff;
+// Assuming image is of size 400 x 400
+$long_para = 400/$long_diff;
 $lat_para = 400/$lat_diff;
 $number = 0;
 $html_str2 = " ";
