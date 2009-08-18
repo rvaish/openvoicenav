@@ -132,11 +132,11 @@ var t=setTimeout("document.geo.poi_name.value = y.innerHTML",1000);
 <br>
 <center>
 Let's check out amenities around some famous European places! 
-<h4><a href="http://localhost/eurotriptalk/orsaudible.php?poi_ors=amenity&poi_name=berlin+wall,+berlin,+germany">Berlin Wall, Germany</a></h4>
-<h4><a href="http://localhost/eurotriptalk/orsaudible.php?poi_ors=amenity&poi_name=london+bridge,+london">London Bridge, UK</a></h4>
-<h4><a href="http://localhost/eurotriptalk/orsaudible.php?poi_ors=amenity&poi_name=tower+of+pisa,+pisa,+italy">Leaning Tower of Pisa, Italy</a></h4>
-<h4><a href="http://localhost/eurotriptalk/orsaudible.php?poi_ors=amenity&poi_name=eiffel+tower,+paris">Eiffel Tower, France</a></h4>
-<h4><a href="http://localhost/eurotriptalk/orsaudible.php?poi_ors=amenity&poi_name=royal+palace,+madrid,+spain">Royal Palace, Spain</a></h4>
+<h4><a href="orsaudible.php?poi_ors=amenity&poi_name=berlin+wall,+berlin,+germany">Berlin Wall, Germany</a></h4>
+<h4><a href="orsaudible.php?poi_ors=amenity&poi_name=london+bridge,+london">London Bridge, UK</a></h4>
+<h4><a href="orsaudible.php?poi_ors=amenity&poi_name=tower+of+pisa,+pisa,+italy">Leaning Tower of Pisa, Italy</a></h4>
+<h4><a href="orsaudible.php?poi_ors=amenity&poi_name=eiffel+tower,+paris">Eiffel Tower, France</a></h4>
+<h4><a href="orsaudible.php?poi_ors=amenity&poi_name=royal+palace,+madrid,+spain">Royal Palace, Spain</a></h4>
 </center>
 <br>
 <br>
