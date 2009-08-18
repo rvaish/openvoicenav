@@ -69,6 +69,32 @@ $lat1 = substr("$desti",0,"$poss1");
 $long1 = substr("$desti","$poss1");
 
  }
+ 
+// Check for Europe
+
+$flageus = 1;
+  if ( $lat < 64.89 && $lat > 36.14 && $long < 60.59 && $long > -21.89 )
+   {
+   $flageus = 0;
+   }
+  if ( $flageus == 1)
+   {
+   echo "<center>";
+   die("Source is not in Europe, please press Back button, to search again in Europe!");
+   echo "</center>";
+   }
+
+$flageud = 1;
+  if ( $lat1 < 64.89 && $lat1 > 36.14 && $long1 < 60.59 && $long1 > -21.89 )
+   {
+   $flageud = 0;
+   }
+  if ( $flageud == 1)
+   {
+   echo "<center>";
+   die("Destination is not in Europe, please press Back button, to search again in Europe!");
+   echo "</center>";
+   }   
 
 
 $url_source = $long.",".$lat;
@@ -127,7 +153,7 @@ foreach ($ril4->RouteInstruction as $ri2) {
 
 echo "</br>";
 echo "<center>";
-echo "<a href='http://localhost/eurotriptalk/indexrouting.php'> Back </a>";
+echo "<a href='indexrouting.php'> Back </a>";
 echo "<a href='home.html'> Home </a>";	
 echo "</center>";
 echo "</br>";
@@ -170,6 +196,12 @@ for($i=0,$j=0;$i<=$counter;$i++,$j=$j+$url_sizer)
    }
  }
 
+ if ( sizeof($arry_for_lat) == 0 && sizeof($arry_for_long) == 0)
+ {
+  echo "<center>";
+  die(" 0 Results for your Query, please press Back button to search again!");
+  echo "<center>";
+ }
   $maxlat = max($arry_for_lat);
   $maxlong = max($arry_for_long);
   

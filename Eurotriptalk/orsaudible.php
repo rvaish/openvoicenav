@@ -1,7 +1,7 @@
 <html>
 <head>
 <META http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>OSM Talking Maps</title>
+<title>OSM Talking Maps-Europe</title>
     <script type="text/javascript" src="json2.js"></script>
     <script type="text/javascript" src="outfox-0.4.0.js"></script>
     <script type="text/javascript">
@@ -36,10 +36,8 @@
 
 </head>
 <body onload="onLoad()">
- <center<h4>OSM Audible Maps for Firefox</h4></center>
+ <center<h4>OSM Audible Maps for Firefox-Europe</h4></center>
  <div id="box"></div>
- 
- 
 
 
 
@@ -54,7 +52,16 @@ $url_orsnamefinder = "http://data.giub.uni-bonn.de/openrouteservice/php/Geocode_
 $url_geo = $url_orsnamefinder."".$url_query.""."&MaxResponse=1";
 
 // Calculating Lat/Long for POI CENTER
-$xml_geo = simplexml_load_file("$url_geo");
+echo $xml_geo = simplexml_load_file("$url_geo");
+/*
+if ($xml_geo = " ")
+ {
+  echo "<center>";
+  die(" 0 Results to your query, please press Back button to Search again! </br>( This may be because, you misspelled your query, or query does not exists in Europe, or no such entry in database exists.)");
+  echo "</center>";
+ }
+ */
+ 
 define("NS_XLS_geo", "http://www.opengis.net/xls"); 
 define("NS_Point_geo", "http://www.opengis.net/gml");
 $ril_geo = $xml_geo->children(NS_XLS_geo)->Response->GeocodeResponse->GeocodeResponseList;
@@ -68,6 +75,7 @@ $ril_geo1 = $ri_geo->children(NS_Point_geo)->Point->pos;
 $pos_geo = stripos("$ril_geo1"," ");
 $long_geo = substr("$ril_geo1",0,"$pos_geo");
 $lat_geo = substr("$ril_geo1","$pos_geo");
+
  }
  
 elseif (eregi("^[0-9-]+(\.,\s[0-9]+)*", $poi_search))
@@ -76,8 +84,22 @@ elseif (eregi("^[0-9-]+(\.,\s[0-9]+)*", $poi_search))
   $pos_geo = stripos("$poi_search",",");
   $lat_geo = substr("$poi_search",0,"$pos_geo");
   $long_geo = substr("$poi_search",$pos_geo+1);
-  
+   
  }
+ 
+// Check for Europe
+
+$flageu = 1;
+  if ( $lat_geo < 64.89 && $lat_geo > 36.14 && $long_geo < 60.59 && $long_geo > -21.89 )
+   {
+   $flageu = 0;
+   }
+  if ( $flageu == 1)
+   {
+   echo "<center>";
+   die("This location is not in Europe, please press Back button, to search again in Europe!");
+   echo "</center>";
+   }
 
 // Creating URL for POI Extraction
 $finalq_q = $long_geo.",".$lat_geo;
@@ -111,6 +133,14 @@ $rilmm2 = $rimm->POI->children(NS_Point)->Point->pos;
   $in++;
   }
 }
+
+if ( sizeof($latmm) == 0 && sizeof($longmm) == 0)
+ {
+  echo "<center>";
+  die(" 0 Results for your Query, please press Back button to search again!");
+  echo "<center>";
+ }
+
 $top = max($latmm)+0.000001;
 $right = max($longmm)+0.000001;
 $down = min($latmm)-0.000001;
@@ -212,7 +242,7 @@ for($k=0;$k<$number;$k++)
   }
 echo "</br>";
 echo "<center>";
-echo "<a href='http://localhost/eurotriptalk/indexaudi.php'> Back </a>";
+echo "<a href='indexaudi.php'> Back </a>";
 echo "<a href='home.html'> Home </a>";	
 echo "</center>";
 echo "</br>";
