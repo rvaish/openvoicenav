@@ -75,8 +75,8 @@ Point of Interests along Route and/or around Source/Destination in Europe
 </form><br><br><br><br>
 
 <center>
-<h4><a href="http://localhost/eurotriptalk/orspoi.php?poi_ors=amenity&source=tower+of+london,+london&desti=big+ben,+london">Let's check out amenities along route from Tower of London to Big Ben in London!</a></h4>
-<h4><a href="http://localhost/eurotriptalk/orspoi.php?poi_ors=hotel&source=Eiffel+Tower,+paris&desti=Louvre,+paris">or Hotels around Eiffel Tower and Louvre in Paris! </a></h4>
+<h4><a href="orspoi.php?poi_ors=amenity&source=tower+of+london,+london&desti=big+ben,+london">Let's check out amenities along route from Tower of London to Big Ben in London!</a></h4>
+<h4><a href="orspoi.php?poi_ors=hotel&source=Eiffel+Tower,+paris&desti=Louvre,+paris">or Hotels around Eiffel Tower and Louvre in Paris! </a></h4>
 </center>
 <center><a href="http://webanywhere.cs.washington.edu/wa.php">WebAnywhere</a>
 <a href="http://openstreetmap.org">OSM</a>
