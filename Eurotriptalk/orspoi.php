@@ -72,6 +72,33 @@ elseif (eregi("^[0-9-]+(\.,\s[0-9]+)*", $source) && eregi("^[0-9-]+(\.,\s[0-9]+)
   $long_geod = substr("$desti","$poss1");
  }
 
+ // Check for Europe
+
+$flageus = 1;
+  if ( $lat_geo < 64.89 && $lat_geo > 36.14 && $long_geo < 60.59 && $long_geo > -21.89 )
+   {
+   $flageus = 0;
+   }
+  if ( $flageus == 1)
+   {
+   echo "<center>";
+   die("Source is not in Europe, please press Back button, to search again in Europe!");
+   echo "</center>";
+   }
+
+$flageud = 1;
+  if ( $lat_geod < 64.89 && $lat_geod > 36.14 && $long_geod < 60.59 && $long_geod > -21.89 )
+   {
+   $flageud = 0;
+   }
+  if ( $flageud == 1)
+   {
+   echo "<center>";
+   die("Destination is not in Europe, please press Back button, to search again in Europe!");
+   echo "</center>";
+   }   
+   
+   
 // Desti wrt to Source
 if($lat_geod > $lat_geo && $long_geod > $long_geo)
  {
@@ -169,6 +196,14 @@ $rilmm2s = $rimms->POI->children(NS_Points)->Point->pos;
       $ins++;
   }
 }
+
+if ( sizeof($latmms) == 0 && sizeof($longmms) == 0)
+ {
+  echo "<center>";
+  die(" 0 Results for your Query of Source, please press Back button to search again!");
+  echo "<center>";
+ }
+ 
 $tops = max($latmms);
 $rights = max($longmms);
 $downs = min($latmms);
@@ -201,6 +236,14 @@ $rilmm2d = $rimmd->POI->children(NS_Pointd)->Point->pos;
       $ind++;
   }
 }
+
+if ( sizeof($latmmd) == 0 && sizeof($longmmd) == 0)
+ {
+  echo "</br><center>";
+  die(" 0 Results for your Query of Destination, please press Back button to search again!");
+  echo "<center>";
+ }
+ 
 $topd = max($latmmd);
 $rightd = max($longmmd);
 $downd = min($latmmd);
@@ -248,7 +291,7 @@ $image_url = "$image_url1"."$image_url2"."$image_url3"."$point_thing";
 $image_url_final = str_ireplace(" ","%20","$image_url");
 echo "</br>";
 echo "<center>";
-echo "<a href='http://localhost/eurotriptalk/indexpoi.php'> Back </a>";
+echo "<a href='indexpoi.php'> Back </a>";
 echo "<a href='home.html'> Home </a>";	
 echo "</center>";
 echo "</br>";

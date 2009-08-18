@@ -131,19 +131,20 @@ var t=setTimeout("document.geo.poi_name.value = y.innerHTML",1000);
 <br>
 <br>
 <center>
-Let's check out amenities around some famous European places! 
+Let's check out amenities around some famous European places! or <a href="indexglobalmap.php">OSM Maps for Partially Visually Impaired (Global!) </a>
+</center>
 <h4><a href="orsaudible.php?poi_ors=amenity&poi_name=berlin+wall,+berlin,+germany">Berlin Wall, Germany</a></h4>
 <h4><a href="orsaudible.php?poi_ors=amenity&poi_name=london+bridge,+london">London Bridge, UK</a></h4>
 <h4><a href="orsaudible.php?poi_ors=amenity&poi_name=tower+of+pisa,+pisa,+italy">Leaning Tower of Pisa, Italy</a></h4>
 <h4><a href="orsaudible.php?poi_ors=amenity&poi_name=eiffel+tower,+paris">Eiffel Tower, France</a></h4>
 <h4><a href="orsaudible.php?poi_ors=amenity&poi_name=royal+palace,+madrid,+spain">Royal Palace, Spain</a></h4>
-</center>
+
 <br>
 <br>
 <center>
 <a href="http://openstreetmap.org">OSM</a>
 <a href="http://openrouteservice.org/">ORS</a>
-<a href="http://localhost/ors/indexors.php">WebAnywhere</a>
+<a href="http://webanywhere.cs.washington.edu/wa.php">WebAnywhere</a>
 <a href="http://www.mozilla.com/products/download.html?product=firefox-3.0.13&os=win&lang=en-US">Download Firefox</a>
 <a href="http://cs.unc.edu/Research/assist/outfox/xpi/outfox.xpi">Install Outfox</a>
 <a href="http://gears.google.com/">Install Google Gears</a>
