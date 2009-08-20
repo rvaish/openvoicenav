@@ -149,6 +149,17 @@ $left = min($longmm)-0.000001;
 $image_url1 = "http://dev.openstreetmap.org/~pafciu17/?module=map&bbox=";
 $image_url2 = $left.",".$top.",".$right.",".$down;
 $image_url3 = "&width=800&height=400&points=";
+
+// get actual bbox for the image
+$image_url3_bbox = "&width=800&height=400&bboxReturnFormat=csv";
+$image_url_bbox = $image_url1.$image_url2.$image_url3_bbox;
+$bbox = file_get_contents($image_url_bbox);
+$bbox_array = split(',',$bbox);
+$left = $bbox_array[0];
+$top = $bbox_array[1];
+$right = $bbox_array[2];
+$down = $bbox_array[3];
+
 $long_diff = $right-$left;
 $lat_diff = $top-$down;
 $area = $long_diff*$lat_diff;
