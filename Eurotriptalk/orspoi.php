@@ -167,8 +167,8 @@ define("NS_XLSd", "http://www.opengis.net/xls");
 define("NS_Pointd", "http://www.opengis.net/gml");
 $rild = $xmld->children(NS_XLSd)->Response->DirectoryResponse;
 $ind = 0;
-$point_things = " ";
-$point_thingd = " ";
+$point_things = $long_geo.','.$lat_geo.','.'color:255:0:0;' ;
+$point_thingd = $long_geod.','.$lat_geod.','.'color:0:255:0;';
 // foreach to find MAX/MIN of Lat/Long to create BBOX in Image
 //echo "<center>";
 //echo "POIs near".$source."<br/>";
